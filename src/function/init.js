@@ -345,17 +345,29 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, trigger, 
         if (options.autocomplete) {
             var autocomplete = function() {
                 var events = {};
+                //HACK: space after colon triggers "enter"
+                var finished = false; // tracks when "space" should be treated like "enter"
                 if (options.shortcuts) {
                     events.onKeydown = function (e, commands) {
-                        if (!e.ctrlKey && e.which == 13) {
+                        if (!e.ctrlKey && e.which == 13) { // "enter"
                             return commands.KEY_ENTER;
+                        } else if (e.which == 186) { // "colon"
+                            finished = true;
+                        } else if (e.which == 32 && finished) { // "space"
+                            return commands.KEY_ENTER;
+                        } else {
+                            finished = false;
                         }
                     };
                 }
                 var map = $.map(emojione.emojioneList, function (_, emoji) {
                     return !options.autocompleteTones ? /_tone[12345]/.test(emoji) ? null : emoji : emoji;
                 });
-                map.sort();
+                // Ignore the trailing colon when sorting (so :cat: is above :cat2:)
+                map.sort(function(a, b) {
+                    if (a.replace(/:$/, '') > b.replace(/:$/, '')) return 1
+                    return -1 // never zero because there shouldn't be duplicates =/
+                });
                 editor.textcomplete([
                     {
                         id: css_class,
