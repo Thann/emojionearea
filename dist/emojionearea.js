@@ -3,7 +3,7 @@
  * https://github.com/mervick/emojionearea
  * Copyright Andrey Izman and other contributors
  * Released under the MIT license
- * Date: 2016-06-04T14:25Z
+ * Date: 2016-07-21T21:25Z
  */
 (function(document, window, $) {
     'use strict';
@@ -855,7 +855,7 @@
                 editor.textcomplete([
                     {
                         id: css_class,
-                        match: /(:[\-+\w]*)$/,
+                        match: /(^|\s)(:[\-+\w]*:?)$/,
                         search: function (term, callback) {
                             callback($.map(map, function (emoji) {
                                 return emoji.indexOf(term) === 0 ? emoji : null;
@@ -869,7 +869,7 @@
                         },
                         cache: true,
                         maxCount: 15,
-                        index: 1
+                        index: 2
                     }
                 ], events);
             };

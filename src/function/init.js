@@ -359,7 +359,7 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, trigger, 
                 editor.textcomplete([
                     {
                         id: css_class,
-                        match: /(:[\-+\w]*)$/,
+                        match: /(^|\s)(:[\-+\w]*:?)$/,
                         search: function (term, callback) {
                             callback($.map(map, function (emoji) {
                                 return emoji.indexOf(term) === 0 ? emoji : null;
@@ -373,7 +373,7 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, trigger, 
                         },
                         cache: true,
                         maxCount: 15,
-                        index: 1
+                        index: 2
                     }
                 ], events);
             };
